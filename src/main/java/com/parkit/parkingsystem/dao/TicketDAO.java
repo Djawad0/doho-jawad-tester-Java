@@ -86,4 +86,29 @@ public class TicketDAO {
         }
         return false;
     }
+    
+    public int getNbTicket(String vehicleRegNumber) {
+    	Connection con = null;
+    	int nb = 0;
+        try {
+            con = dataBaseConfig.getConnection();
+            PreparedStatement ps = con.prepareStatement(DBConstants.GET_NB_TICKET);
+            ps.setString(1, vehicleRegNumber);
+            ResultSet rs = ps.executeQuery();
+            if(rs.next()){ 
+            	nb = rs.getInt("count");
+            }
+            dataBaseConfig.closeResultSet(rs);
+            dataBaseConfig.closePreparedStatement(ps);
+            return nb;
+        }catch (Exception ex){
+            logger.error("Error there is no occurences",ex);
+        }finally {
+            dataBaseConfig.closeConnection(con);
+            
+        }
+		return nb;
+		
+       
+    }
 }
