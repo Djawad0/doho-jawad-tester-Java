@@ -62,7 +62,7 @@ public class ParkingService {
         return inputReaderUtil.readVehicleRegistrationNumber();
     }
 
-    public ParkingSpot getNextParkingNumberIfAvailable(){
+    public ParkingSpot getNextParkingNumberIfAvailable() throws Exception{
         int parkingNumber=0;
         ParkingSpot parkingSpot = null;
         try{
@@ -72,16 +72,18 @@ public class ParkingService {
                 parkingSpot = new ParkingSpot(parkingNumber,parkingType, true);
             }else{
                 throw new Exception("Error fetching parking number from DB. Parking slots might be full");
-            }
+            } 
         }catch(IllegalArgumentException ie){
             logger.error("Error parsing user input for type of vehicle", ie);
+            throw ie;
         }catch(Exception e){
             logger.error("Error fetching next available parking slot", e);
+            throw e;
         }
         return parkingSpot;
     }
 
-    private ParkingType getVehichleType(){
+    private ParkingType getVehichleType() {
         System.out.println("Please select vehicle type from menu");
         System.out.println("1 CAR");
         System.out.println("2 BIKE");
